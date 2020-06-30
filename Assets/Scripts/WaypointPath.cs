@@ -26,4 +26,9 @@ public class WaypointPath : MonoBehaviour
             Debug.DrawLine(waypoint1.transform.position + offset, waypoint2.transform.position + offset, Color.red, 0.0f) ;
         }
     }
+
+    public float Length()
+    {
+        return Vector3.Distance(waypoint1.transform.position, waypoint2.transform.position);
+    }
 }

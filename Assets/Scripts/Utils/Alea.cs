@@ -13,5 +13,10 @@ public static class Alea
     {
         return rnd.Next(min, max);
     }
+
+    public static float GetFloat(float min, float max)
+    {
+        return (float) rnd.NextDouble() * (max - min) + min;
+    }
 }
 

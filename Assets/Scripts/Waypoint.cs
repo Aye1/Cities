@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private List<Waypoint> _connectedWaypoints;
+
+    public List<Waypoint> ConnectedWaypoints { get { return _connectedWaypoints; } }
+
+    private void Awake()
     {
-        
+        _connectedWaypoints = new List<Waypoint>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ConnectWaypoint(Waypoint w)
     {
-        
+        if(!_connectedWaypoints.Contains(w))
+        {
+            _connectedWaypoints.Add(w);
+        }
+    }
+
+    public void DisconnectWaypoint(Waypoint w)
+    {
+        _connectedWaypoints.Remove(w);
     }
 }

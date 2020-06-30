@@ -7,6 +7,7 @@ public class MovingObject : MonoBehaviour
 {
     private Vector3 _destination;
     private Waypoint _destinationWaypoint;
+    private Waypoint _latesteWaypointReached;
     private float _eps = 0.1f;
     private Rigidbody _rbd;
     private bool _destinationReached = false;
@@ -21,7 +22,7 @@ public class MovingObject : MonoBehaviour
     {
         _rbd = GetComponent<Rigidbody>();
         _destination = transform.position;
-        GoTo(WaypointManager.Instance.GetClosestWaypoint(transform).transform.position);
+        GoToClosestWaypoint();
     }
 
     private void OnDestroy()
@@ -34,7 +35,13 @@ public class MovingObject : MonoBehaviour
     {
         if(CharacterManager.Instance.automaticMode && _destinationReached)
         {
-            GoToRandomWaypoint();
+            if(_latesteWaypointReached != null)
+            {
+                GoToRandomConnectedWaypoint(_latesteWaypointReached);
+            } else
+            {
+                GoToClosestWaypoint();
+            }
         }
         UpdateVelocity();
     }
@@ -54,6 +61,10 @@ public class MovingObject : MonoBehaviour
         } else
         {
             _destinationReached = true;
+            if(_destinationWaypoint != null)
+            {
+                _latesteWaypointReached = _destinationWaypoint;
+            }
         }
 
         _rbd.velocity = velocity;
@@ -63,6 +74,16 @@ public class MovingObject : MonoBehaviour
     {
         if(!CharacterManager.Instance.automaticMode)
             GoTo(new Vector2(position.x, position.z));
+    }
+
+    private void GoToClosestWaypoint()
+    {
+        GoTo(WaypointManager.Instance.GetClosestWaypoint(transform));
+    }
+
+    private void GoToRandomConnectedWaypoint(Waypoint currentWaypoint)
+    {
+        GoTo(WaypointManager.Instance.GetRandomConnectedWaypoint(currentWaypoint));
     }
 
     private void GoToRandomWaypoint()
