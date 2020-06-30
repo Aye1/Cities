@@ -6,6 +6,7 @@ public class WaypointManager : MonoBehaviour
 {
 
     private List<Waypoint> _waypoints;
+    public WaypointPath templatePath;
 
     public IEnumerable<Waypoint> Waypoints
     {
@@ -31,7 +32,7 @@ public class WaypointManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreatePaths();
     }
 
     // Update is called once per frame
@@ -48,6 +49,20 @@ public class WaypointManager : MonoBehaviour
             if(waypoint != null)
             {
                 _waypoints.Add(waypoint);
+            }
+        }
+    }
+
+    private void CreatePaths()
+    {
+        Waypoint[] arrWaypoints = _waypoints.ToArray();
+        for(int i = 0; i < arrWaypoints.Length; i++)
+        {
+            for (int j = i+1; j < arrWaypoints.Length; j++)
+            {
+                WaypointPath newPath = Instantiate(templatePath, Vector3.zero, Quaternion.identity, transform);
+                newPath.waypoint1 = arrWaypoints[i];
+                newPath.waypoint2 = arrWaypoints[j];
             }
         }
     }

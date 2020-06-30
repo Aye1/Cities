@@ -17,6 +17,7 @@ public class CharacterManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public float characterSpeed = 1.0f;
