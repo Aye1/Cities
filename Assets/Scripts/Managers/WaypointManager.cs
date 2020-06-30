@@ -101,7 +101,7 @@ public class WaypointManager : MonoBehaviour
     {
         DisconnectWaypoints(path.waypoint1, path.waypoint2);
         _paths.Remove(path);
-        Destroy(path);
+        Destroy(path.gameObject);
     }
 
     private void ConnectWaypoints(Waypoint w1, Waypoint w2)
@@ -127,13 +127,15 @@ public class WaypointManager : MonoBehaviour
         {
             if(w.transform.hasChanged)
             {
+                List<WaypointPath> pathsToDestroy = new List<WaypointPath>();
                 foreach(WaypointPath p in GetPathsWithWaypoint(w))
                 {
                     if(p.Length() > maxPathLength)
                     {
-                        DestroyPath(p);
+                        pathsToDestroy.Add(p);
                     }
                 }
+                pathsToDestroy.ForEach(p => DestroyPath(p));
 
                 foreach(Waypoint w2 in GetWaypointsNotConnectedTo(w))
                 {
@@ -176,6 +178,10 @@ public class WaypointManager : MonoBehaviour
     public Waypoint GetRandomConnectedWaypoint(Waypoint w)
     {
         List<Waypoint> connectedWaypoints = w.ConnectedWaypoints;
+        if(connectedWaypoints.Count == 0)
+        {
+            return null;
+        }
         int id = Alea.GetInt(0, connectedWaypoints.Count);
         return connectedWaypoints.ToArray()[id];
     }
