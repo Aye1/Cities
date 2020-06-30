@@ -148,6 +148,14 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
+    public void AddWaypoint(Waypoint w)
+    {
+        if(!_waypoints.Contains(w))
+        {
+            _waypoints.Add(w);
+        }
+    }
+
     public Waypoint GetClosestWaypoint(Vector3 position)
     {
         float minDist = float.MaxValue;
