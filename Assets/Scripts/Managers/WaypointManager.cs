@@ -40,7 +40,7 @@ public class WaypointManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenerateRandomWaypoints(10);
+        //GenerateRandomWaypoints(10);
         CreatePaths();
     }
 

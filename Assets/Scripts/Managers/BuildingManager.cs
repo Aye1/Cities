@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+public enum BuildChoice { House, Inn };
 
 public class BuildingManager : MonoBehaviour
 {
-
     public static BuildingManager Instance { get; private set; }
 
     [Header("Editor Bindings")]
     [SerializeField] private GameObject _houseTemplate;
+    [SerializeField] private GameObject _innTemplate;
+
+    private BuildChoice _currentBuildChoice;
 
     void Awake()
     {
@@ -38,9 +43,17 @@ public class BuildingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        ManageKeyboard();
     }
 
+    private void ManageKeyboard()
+    {
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            _currentBuildChoice = (BuildChoice)(((int)_currentBuildChoice + 1) % Enum.GetNames(typeof(BuildChoice)).Length);
+        }
+    }
+    
     private void ManageClick(Vector3 clickPos)
     {
         CreateHouse(clickPos);
@@ -48,9 +61,9 @@ public class BuildingManager : MonoBehaviour
 
     private void CreateHouse(Vector3 position)
     {
-        GameObject house = Instantiate(_houseTemplate, position, Quaternion.identity, transform);
-        Waypoint w = house.GetComponentInChildren<Waypoint>();
-        if(w != null)
+        GameObject template = _currentBuildChoice == BuildChoice.House ? _houseTemplate : _innTemplate;
+        GameObject house = Instantiate(template, position, Quaternion.identity, transform);
+        foreach(Waypoint w in house.GetComponentsInChildren<Waypoint>())
         {
             WaypointManager.Instance.AddWaypoint(w);
         }

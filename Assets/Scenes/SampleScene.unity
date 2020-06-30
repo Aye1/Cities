@@ -630,6 +630,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _houseTemplate: {fileID: 8045846825860712111, guid: 4d1c923b4c5a541e0aafe184259deebd,
     type: 3}
+  _innTemplate: {fileID: 6715393746777896936, guid: 75dfc4d4d04f9415a926b10895c92fd3,
+    type: 3}
 --- !u!4 &1170004968
 Transform:
   m_ObjectHideFlags: 0
