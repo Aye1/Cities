@@ -62,7 +62,7 @@ public class BuildingManager : MonoBehaviour
     private void CreateHouse(Vector3 position)
     {
         GameObject template = _currentBuildChoice == BuildChoice.House ? _houseTemplate : _innTemplate;
-        GameObject house = Instantiate(template, position, Quaternion.identity, transform);
+        GameObject house = Instantiate(template, position, Quaternion.Euler(0, Alea.GetInt(0,360),0), transform);
         foreach(Waypoint w in house.GetComponentsInChildren<Waypoint>())
         {
             WaypointManager.Instance.AddWaypoint(w);

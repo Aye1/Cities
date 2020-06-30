@@ -6,6 +6,7 @@ public class WaypointPath : MonoBehaviour
 {
     public Waypoint waypoint1;
     public Waypoint waypoint2;
+    public Color pathColor = Color.red;
 
     // Start is called before the first frame update
     void Start()

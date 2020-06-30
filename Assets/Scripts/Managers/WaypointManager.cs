@@ -13,6 +13,7 @@ public class WaypointManager : MonoBehaviour
     public float maxPathLength = 2.0f;
 
     private List<Waypoint> _waypoints;
+    private List<LocalWaypoint> _localWaypoints;
     private List<WaypointPath> _paths;
 
     public IEnumerable<Waypoint> Waypoints
@@ -28,6 +29,7 @@ public class WaypointManager : MonoBehaviour
         {
             Instance = this;
             _waypoints = new List<Waypoint>();
+            _localWaypoints = new List<LocalWaypoint>();
             _paths = new List<WaypointPath>();
             RegisterChildrenWaypoints();
         }
@@ -88,13 +90,23 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
-    private void CreatePath(Waypoint w1, Waypoint w2)
+    private void CreateLocalPaths(LocalWaypoint w)
+    {
+        foreach(Waypoint w2 in w.LocalWaypoints)
+        {
+            WaypointPath path = CreatePath(w, w2);
+            path.pathColor = Color.blue;
+        }
+    }
+
+    private WaypointPath CreatePath(Waypoint w1, Waypoint w2)
     {
         WaypointPath newPath = Instantiate(_pathTemplate, Vector3.zero, Quaternion.identity, transform);
         newPath.waypoint1 = w1;
         newPath.waypoint2 = w2;
         ConnectWaypoints(w1, w2);
         _paths.Add(newPath);
+        return newPath;
     }
 
     private void DestroyPath(WaypointPath path)
@@ -152,7 +164,15 @@ public class WaypointManager : MonoBehaviour
     {
         if(!_waypoints.Contains(w))
         {
-            _waypoints.Add(w);
+            if (w is LocalWaypoint lw)
+            {
+                _localWaypoints.Add(lw);
+                CreateLocalPaths(lw);
+            }
+            else
+            {
+                _waypoints.Add(w);
+            }
         }
     }
 
@@ -185,13 +205,21 @@ public class WaypointManager : MonoBehaviour
 
     public Waypoint GetRandomConnectedWaypoint(Waypoint w)
     {
-        List<Waypoint> connectedWaypoints = w.ConnectedWaypoints;
-        if(connectedWaypoints.Count == 0)
+        List<Waypoint> possibleWaypoints = new List<Waypoint>();
+        possibleWaypoints.AddRange(w.ConnectedWaypoints);
+        possibleWaypoints.AddRange(GetLocalWaypointsConnectedTo(w));
+
+        if(possibleWaypoints.Count == 0)
         {
             return null;
         }
-        int id = Alea.GetInt(0, connectedWaypoints.Count);
-        return connectedWaypoints.ToArray()[id];
+        int id = Alea.GetInt(0, possibleWaypoints.Count);
+        return possibleWaypoints.ToArray()[id];
+    }
+
+    public IEnumerable<Waypoint> GetLocalWaypointsConnectedTo(Waypoint w)
+    {
+        return _localWaypoints.Where(x => x.LocalWaypoints.Contains(w));
     }
 
     public IEnumerable<Waypoint> GetWaypointsNotConnectedTo(Waypoint w)
