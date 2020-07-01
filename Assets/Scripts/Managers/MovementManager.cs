@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterManager : MonoBehaviour
+public class MovementManager : MonoBehaviour
 {
 
-    public static CharacterManager Instance { get; private set; }
+    public static MovementManager Instance { get; private set; }
 
     void Awake()
     {
@@ -20,6 +20,6 @@ public class CharacterManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public float characterSpeed = 1.0f;
+    public float speed = 1.0f;
     public bool automaticMode = false;
 }

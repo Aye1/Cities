@@ -33,7 +33,7 @@ public class MovingObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(CharacterManager.Instance.automaticMode && _destinationReached)
+        if(MovementManager.Instance.automaticMode && _destinationReached)
         {
             if(_latesteWaypointReached != null)
             {
@@ -55,7 +55,7 @@ public class MovingObject : MonoBehaviour
         Vector3 velocity = Vector3.zero;
         if (Vector3.Distance(VectorUtils.YToZero(transform.position), VectorUtils.YToZero(_destination)) > _eps)
         {
-            velocity = (_destination - transform.position).normalized * CharacterManager.Instance.characterSpeed;
+            velocity = (_destination - transform.position).normalized * MovementManager.Instance.speed;
             velocity.y = 0.0f;
             _destinationReached = false;
         } else
@@ -72,7 +72,7 @@ public class MovingObject : MonoBehaviour
 
     private void OnMouseClicked(Vector3 position)
     {
-        if(!CharacterManager.Instance.automaticMode)
+        if(!MovementManager.Instance.automaticMode)
             GoTo(new Vector2(position.x, position.z));
     }
 
