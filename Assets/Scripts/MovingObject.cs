@@ -12,6 +12,9 @@ public class MovingObject : MonoBehaviour
     private Rigidbody _rbd;
     private bool _destinationReached = false;
 
+    public delegate void WaypointEvent(Waypoint w);
+    public WaypointEvent OnWaypointReached;
+
     private void Awake()
     {
         MouseManager.Instance.MouseClicked += OnMouseClicked;
@@ -64,6 +67,7 @@ public class MovingObject : MonoBehaviour
             if(_destinationWaypoint != null)
             {
                 _latesteWaypointReached = _destinationWaypoint;
+                OnWaypointReached?.Invoke(_latesteWaypointReached);
             }
         }
 
@@ -94,6 +98,7 @@ public class MovingObject : MonoBehaviour
     public void GoTo(Waypoint waypoint)
     {
         _destinationWaypoint = waypoint;
+        // _destination will just be set in the Update()
     }
 
     public void GoTo(Vector3 position)
