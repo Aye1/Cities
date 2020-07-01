@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
-public enum BuildChoice { House, Inn };
+public enum BuildChoice { House, Inn, Sawmill };
+
+[Serializable]
+public struct BuildBinding
+{
+    public BuildChoice buildType;
+    public GameObject template;
+}
 
 public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager Instance { get; private set; }
 
     [Header("Editor Bindings")]
-    [SerializeField] private GameObject _houseTemplate;
-    [SerializeField] private GameObject _innTemplate;
+    [SerializeField] private List<BuildBinding> _templates;
+    
 
     private BuildChoice _currentBuildChoice;
 
@@ -61,7 +69,7 @@ public class BuildingManager : MonoBehaviour
 
     private void CreateHouse(Vector3 position)
     {
-        GameObject template = _currentBuildChoice == BuildChoice.House ? _houseTemplate : _innTemplate;
+        GameObject template = _templates.First(x => x.buildType == _currentBuildChoice).template;
         GameObject house = Instantiate(template, position, Quaternion.Euler(0, Alea.GetInt(0,360),0), transform);
         foreach(Waypoint w in house.GetComponentsInChildren<Waypoint>())
         {
