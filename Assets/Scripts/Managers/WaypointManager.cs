@@ -5,9 +5,11 @@ using System.Linq;
 
 public class WaypointManager : MonoBehaviour
 {
+#pragma warning disable 0649
     [Header("Editor Bindings")]
     [SerializeField] private Waypoint _waypointTemplate;
     [SerializeField] private WaypointPath _pathTemplate;
+#pragma warning restore 0649
 
     [Header("Parameters")]
     public float maxPathLength = 2.0f;
@@ -178,14 +180,15 @@ public class WaypointManager : MonoBehaviour
 
     public Waypoint GetClosestWaypoint(Vector3 position)
     {
-        float minDist = float.MaxValue;
+        float minSqrDist = float.MaxValue;
         Waypoint res = null;
         foreach(Waypoint w in _waypoints)
         {
-            float dist = Vector3.Distance(position, w.transform.position);
-            if(dist < minDist)
+            // Use sqrMagnitude instead of Distance, to avoid the square root computing
+            float dist = (w.transform.position - position).sqrMagnitude;
+            if(dist < minSqrDist)
             {
-                minDist = dist;
+                minSqrDist = dist;
                 res = w;
             }
         }

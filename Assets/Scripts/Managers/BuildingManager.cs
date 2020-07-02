@@ -17,9 +17,11 @@ public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager Instance { get; private set; }
 
+#pragma warning disable 0649
     [Header("Editor Bindings")]
     [SerializeField] private List<BuildBinding> _templates;
-    
+#pragma warning restore 0649
+
 
     private BuildChoice _currentBuildChoice;
 

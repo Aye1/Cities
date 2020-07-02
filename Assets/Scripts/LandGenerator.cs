@@ -13,12 +13,12 @@ public class LandGenerator : MonoBehaviour
     public List<GameObject> trees;
 
     private Dictionary<Vector2Int, GameObject> _createdTrees;
-    private int numberSteps;
+    private int _numberSteps;
 
     // Start is called before the first frame update
     void Start()
     {
-        numberSteps = (int)(size / stepSize);
+        _numberSteps = (int)(size / stepSize);
         GenerateRandomTrees();
         for(int i = 0; i < numberBalances; i++)
         {
@@ -33,9 +33,9 @@ public class LandGenerator : MonoBehaviour
         {
             return;
         }
-        for (int i = 0; i < 2 * numberSteps; i++)
+        for (int i = 0; i < 2 * _numberSteps; i++)
         {
-            for (int j = 0; j < 2 * numberSteps; j++)
+            for (int j = 0; j < 2 * _numberSteps; j++)
             {
                 if(Alea.GetFloat(0.0f, 1.0f) <= density)
                 {
@@ -58,9 +58,9 @@ public class LandGenerator : MonoBehaviour
     {
         List<Vector2Int> treesToDestroy = new List<Vector2Int>();
         List<Vector2Int> treesToCreate = new List<Vector2Int>();
-        for (int i = 0; i < 2 * numberSteps; i++)
+        for (int i = 0; i < 2 * _numberSteps; i++)
         {
-            for (int j = 0; j < 2 * numberSteps; j++)
+            for (int j = 0; j < 2 * _numberSteps; j++)
             {
                 bool isSurrounded = IsPositionSurroundedByTrees(new Vector2Int(i, j));
                 Vector2Int position = new Vector2Int(i, j);
@@ -129,8 +129,13 @@ public class LandGenerator : MonoBehaviour
     {
         float noiseX = Alea.GetFloat(0.0f, noise);
         float noiseZ = Alea.GetFloat(0.0f, noise);
-        Vector3 pos = new Vector3((position.x + noiseX - numberSteps) * stepSize, 0.0f, (position.y + noiseZ - numberSteps) * stepSize);
+        Vector3 pos = new Vector3((position.x + noiseX - _numberSteps) * stepSize, 0.0f, (position.y + noiseZ - _numberSteps) * stepSize);
         GameObject tree = GenerateTree(pos);
         _createdTrees.Add(new Vector2Int(position.x, position.y), tree);
     }
+
+    /*public GameObject FindNearestTree(Vector3 position)
+    {
+
+    }*/
 }
