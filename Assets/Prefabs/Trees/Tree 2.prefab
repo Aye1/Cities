@@ -65,7 +65,7 @@ PrefabInstance:
     - target: {fileID: 2502676610390523239, guid: 4e8b12cc5f41b47449648ce0739ac221,
         type: 3}
       propertyPath: m_Name
-      value: Tree
+      value: Tree 2
       objectReference: {fileID: 0}
     - target: {fileID: 7618705708700710210, guid: 4e8b12cc5f41b47449648ce0739ac221,
         type: 3}
@@ -73,5 +73,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -225363822245097011, guid: c3e79a355928d4146804daffad2ea7c5,
         type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5527984766828297368, guid: 4e8b12cc5f41b47449648ce0739ac221, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4e8b12cc5f41b47449648ce0739ac221, type: 3}

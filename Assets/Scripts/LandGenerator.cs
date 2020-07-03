@@ -10,12 +10,12 @@ public class LandGenerator : MonoBehaviour
     [Range(0.0f, 1.0f)] public float noise = 0.5f;
     public float stepSize = 1.0f;
     public int numberBalances = 0;
-    public List<GameObject> treesTemplates;
+    public List<Tree> treesTemplates;
 
-    private Dictionary<Vector2Int, GameObject> _createdTrees;
+    private Dictionary<Vector2Int, Tree> _createdTrees;
     private int _numberSteps;
 
-    public IEnumerable<GameObject> Trees
+    public IEnumerable<Tree> Trees
     {
         get { return _createdTrees.Values.ToList(); }
     }
@@ -47,7 +47,7 @@ public class LandGenerator : MonoBehaviour
 
     public void GenerateRandomTrees()
     {
-        _createdTrees = new Dictionary<Vector2Int, GameObject>();
+        _createdTrees = new Dictionary<Vector2Int, Tree>();
         if(density == 0.0f)
         {
             return;
@@ -64,10 +64,10 @@ public class LandGenerator : MonoBehaviour
         }
     }
 
-    private GameObject GenerateTree(Vector3 position)
+    private Tree GenerateTree(Vector3 position)
     {
         int id = Alea.GetInt(0, treesTemplates.Count);
-        GameObject tree = Instantiate(treesTemplates[id], Vector3.zero, Quaternion.identity, transform);
+        Tree tree = Instantiate(treesTemplates[id], Vector3.zero, Quaternion.identity, transform);
         tree.transform.localPosition = position;
         tree.transform.localScale = Vector3.one * 0.3f;
         return tree;
@@ -102,7 +102,7 @@ public class LandGenerator : MonoBehaviour
         return GetTreeNeighbours(position).Count() >= 4;
     }
 
-    private IEnumerable<GameObject> GetTreeNeighbours(Vector2Int position)
+    private IEnumerable<Tree> GetTreeNeighbours(Vector2Int position)
     {
         return _createdTrees.Where(x =>
             {
@@ -127,7 +127,7 @@ public class LandGenerator : MonoBehaviour
 
     private void DestroyTree(Vector2Int position)
     {
-        GameObject tree;
+        Tree tree;
         _createdTrees.TryGetValue(position, out tree);
         if(tree != null)
         {
@@ -149,12 +149,7 @@ public class LandGenerator : MonoBehaviour
         float noiseX = Alea.GetFloat(0.0f, noise);
         float noiseZ = Alea.GetFloat(0.0f, noise);
         Vector3 pos = new Vector3((position.x + noiseX - _numberSteps) * stepSize, 0.0f, (position.y + noiseZ - _numberSteps) * stepSize);
-        GameObject tree = GenerateTree(pos);
+        Tree tree = GenerateTree(pos);
         _createdTrees.Add(new Vector2Int(position.x, position.y), tree);
     }
-
-    /*public GameObject FindNearestTree(Vector3 position)
-    {
-
-    }*/
 }

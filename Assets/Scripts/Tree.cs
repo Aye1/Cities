@@ -1,20 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Tree : MonoBehaviour
 {
     public float woodAmount = 100;
+    public bool occupied = false;
 
-    // Start is called before the first frame update
-    void Start()
+    public delegate void TreeEvent(Tree t);
+    public static TreeEvent OnTreeEmpty;
+
+    public void CutWood(int amount)
     {
-        
+        woodAmount--;
+        transform.DOPunchScale(Vector3.one * 0.03f, 1.0f);
+        if(woodAmount <= 0)
+        {
+            DestroyTree();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void DestroyTree()
     {
-        
+        OnTreeEmpty?.Invoke(this);
+        Destroy(gameObject);
     }
 }
