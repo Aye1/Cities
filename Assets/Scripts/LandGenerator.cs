@@ -10,10 +10,29 @@ public class LandGenerator : MonoBehaviour
     [Range(0.0f, 1.0f)] public float noise = 0.5f;
     public float stepSize = 1.0f;
     public int numberBalances = 0;
-    public List<GameObject> trees;
+    public List<GameObject> treesTemplates;
 
     private Dictionary<Vector2Int, GameObject> _createdTrees;
     private int _numberSteps;
+
+    public IEnumerable<GameObject> Trees
+    {
+        get { return _createdTrees.Values.ToList(); }
+    }
+
+    public static LandGenerator Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -47,8 +66,8 @@ public class LandGenerator : MonoBehaviour
 
     private GameObject GenerateTree(Vector3 position)
     {
-        int id = Alea.GetInt(0, trees.Count);
-        GameObject tree = Instantiate(trees[id], Vector3.zero, Quaternion.identity, transform);
+        int id = Alea.GetInt(0, treesTemplates.Count);
+        GameObject tree = Instantiate(treesTemplates[id], Vector3.zero, Quaternion.identity, transform);
         tree.transform.localPosition = position;
         tree.transform.localScale = Vector3.one * 0.3f;
         return tree;

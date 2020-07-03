@@ -885,7 +885,7 @@ MonoBehaviour:
   noise: 0.64
   stepSize: 0.5
   numberBalances: 6
-  trees:
+  treesTemplates:
   - {fileID: 2502676610390523239, guid: 4e8b12cc5f41b47449648ce0739ac221, type: 3}
   - {fileID: 1303426056393528945, guid: b877c7a9528054cbb9893c86010e0b24, type: 3}
   - {fileID: 8951172829996545720, guid: 25f9d72022ecd44dc9d720d73b381998, type: 3}

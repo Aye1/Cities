@@ -6,14 +6,23 @@ using UnityEngine;
 public class MovingObject : MonoBehaviour
 {
     private Vector3 _destination;
-    private Waypoint _destinationWaypoint;
-    private Waypoint _latesteWaypointReached;
+    //private Waypoint _destinationWaypoint;
+    //private Waypoint _latesteWaypointReached;
     private float _eps = 0.1f;
     private Rigidbody _rbd;
     private bool _destinationReached = false;
+    private GameObject _latestObjectReached;
+    private GameObject _destinationObject;
 
-    public delegate void WaypointEvent(Waypoint w);
-    public WaypointEvent OnWaypointReached;
+    /*public delegate void WaypointEvent(Waypoint w);
+    public WaypointEvent OnWaypointReached;*/
+
+    public delegate void ObjectReachedEvent(GameObject g);
+    public ObjectReachedEvent OnObjectReached;
+
+    // Temp variables, I hope
+    public bool sawingMode = false;
+    public Building attachedBuilding;
 
     private void Awake()
     {
@@ -38,12 +47,27 @@ public class MovingObject : MonoBehaviour
     {
         if(MovementManager.Instance.automaticMode && _destinationReached)
         {
-            if(_latesteWaypointReached != null)
+            if (sawingMode && attachedBuilding != null)
             {
-                GoToRandomConnectedWaypoint(_latesteWaypointReached);
-            } else
+                if(_latestObjectReached == null || _latestObjectReached.GetComponent<Waypoint>() != null)
+                {
+                    GoTo((attachedBuilding as Sawmill).GetClosestTree());
+                } else
+                {
+                    GoTo(attachedBuilding.MainWaypoint);
+                }
+            }
+            else
             {
-                GoToClosestWaypoint();
+                Waypoint latestWaypoint = _latestObjectReached.GetComponent<Waypoint>();
+                if (_latestObjectReached != null && latestWaypoint != null)
+                {
+                    GoToRandomConnectedWaypoint(latestWaypoint);
+                }
+                else
+                {
+                    GoToClosestWaypoint();
+                }
             }
         }
         UpdateVelocity();
@@ -51,9 +75,9 @@ public class MovingObject : MonoBehaviour
 
     private void UpdateVelocity()
     {
-        if(_destinationWaypoint != null)
+        if(_destinationObject != null)
         {
-            _destination = _destinationWaypoint.transform.position;
+            _destination = _destinationObject.transform.position;
         }
         Vector3 velocity = Vector3.zero;
         if (Vector3.Distance(VectorUtils.YToZero(transform.position), VectorUtils.YToZero(_destination)) > _eps)
@@ -64,11 +88,13 @@ public class MovingObject : MonoBehaviour
         } else
         {
             _destinationReached = true;
-            if(_destinationWaypoint != null)
+            _latestObjectReached = _destinationObject;
+            OnObjectReached?.Invoke(_latestObjectReached);
+            /*if(_destinationWaypoint != null)
             {
                 _latesteWaypointReached = _destinationWaypoint;
                 OnWaypointReached?.Invoke(_latesteWaypointReached);
-            }
+            }*/
         }
 
         _rbd.velocity = velocity;
@@ -97,13 +123,21 @@ public class MovingObject : MonoBehaviour
 
     public void GoTo(Waypoint waypoint)
     {
-        _destinationWaypoint = waypoint;
+        GoTo(waypoint.gameObject);
+        //_destinationWaypoint = waypoint;
+        //destinationObject = null;
         // _destination will just be set in the Update()
+    }
+
+    public void GoTo(GameObject obj)
+    {
+        _destinationObject = obj;
     }
 
     public void GoTo(Vector3 position)
     {
-        _destinationWaypoint = null;
+        //_destinationWaypoint = null;
+        _destinationObject = null;
         _destination = position;
     }
 

@@ -8,11 +8,13 @@ public class Character : MonoBehaviour
     public Building attachedBuilding;
     private MovingObject _moving;
 
+    private bool _sawingMode = false;
+
     // Start is called before the first frame update
     void Start()
     {
         _moving = GetComponent<MovingObject>();
-        _moving.OnWaypointReached += OnWaypointReached;
+        _moving.OnObjectReached += OnObjectReached;
     }
 
     // Update is called once per frame
@@ -23,7 +25,15 @@ public class Character : MonoBehaviour
 
     private void OnDestroy()
     {
-        _moving.OnWaypointReached -= OnWaypointReached;
+        _moving.OnObjectReached -= OnObjectReached;
+    }
+
+    private void OnObjectReached(GameObject g)
+    {
+        if(g.GetComponent<Waypoint>() != null)
+        {
+            OnWaypointReached(g.GetComponent<Waypoint>());
+        }
     }
 
     private void OnWaypointReached(Waypoint w)
@@ -34,6 +44,11 @@ public class Character : MonoBehaviour
             if (ShouldAttachToBuilding(b))
             {
                 attachedBuilding = b;
+                if(b is Sawmill)
+                {
+                    _moving.sawingMode = true;
+                    _moving.attachedBuilding = b;
+                }
             }
         }
     }
@@ -41,5 +56,10 @@ public class Character : MonoBehaviour
     private bool ShouldAttachToBuilding(Building b)
     {
         return Alea.GetFloat(0.0f, 1.0f) <= 0.5f;
+    }
+
+    private void GoToSawingModeTemp()
+    {
+
     }
 }

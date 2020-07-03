@@ -167,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1639958488249995784}
-  - component: {fileID: -9194399578975419424}
+  - component: {fileID: -5741777879071777685}
   m_Layer: 0
   m_Name: Sawmill
   m_TagString: Untagged
@@ -193,7 +193,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-9194399578975419424
+--- !u!114 &-5741777879071777685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7881679013607647330}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e22fd623afd224aed8d748b73bbd7275, type: 3}
+  m_Script: {fileID: 11500000, guid: a9f709ce89fec4d269594814c260b8b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &858557966

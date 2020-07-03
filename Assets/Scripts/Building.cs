@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    public BuildingWaypoint MainWaypoint
+    {
+        get
+        {
+            BuildingWaypoint res = GetComponentInChildren<BuildingWaypoint>();
+            return res;
+        }
+    }
 
     private void Awake()
     {
         RegisterInternalWaypoints();
+        OnCreate();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    protected virtual void OnCreate() { }
 
     private void RegisterInternalWaypoints()
     {
