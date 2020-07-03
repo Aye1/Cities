@@ -27,6 +27,7 @@ public class LandGenerator : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            Tree.OnTreeEmpty += OnTreeEmptied;
         }
         else
         {
@@ -43,6 +44,11 @@ public class LandGenerator : MonoBehaviour
         {
             BalanceTrees();
         }
+    }
+
+    private void OnDestroy()
+    {
+        Tree.OnTreeEmpty -= OnTreeEmptied;
     }
 
     public void GenerateRandomTrees()
@@ -151,5 +157,11 @@ public class LandGenerator : MonoBehaviour
         Vector3 pos = new Vector3((position.x + noiseX - _numberSteps) * stepSize, 0.0f, (position.y + noiseZ - _numberSteps) * stepSize);
         Tree tree = GenerateTree(pos);
         _createdTrees.Add(new Vector2Int(position.x, position.y), tree);
+    }
+
+    private void OnTreeEmptied(Tree t)
+    {
+        Vector2Int pos = _createdTrees.Where(x => x.Value == t).First().Key;
+        _createdTrees.Remove(pos);
     }
 }

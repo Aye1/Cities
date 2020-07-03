@@ -124,7 +124,10 @@ public class MovingObject : MonoBehaviour
 
     public void GoTo(Waypoint waypoint)
     {
-        GoTo(waypoint.gameObject);
+        if (waypoint != null)
+        {
+            GoTo(waypoint.gameObject);
+        }
     }
 
     public void GoTo(GameObject obj)
