@@ -61,9 +61,10 @@ public class Character : MonoBehaviour
 
     private void OnTreeReached(Tree t)
     {
-        t.CutWood(1);
-        woodCarried++;
-        Debug.Log("wood carried");
+        int amountToCut = 1;
+        t.CutWood(amountToCut);
+        woodCarried += amountToCut;
+        WorldUIManager.Instance.DisplayWoodGatherUI(transform.position, amountToCut);
     }
 
     private void UnloadCarriedWood(Sawmill s)
